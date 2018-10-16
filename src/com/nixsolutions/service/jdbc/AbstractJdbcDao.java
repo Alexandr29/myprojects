@@ -12,7 +12,7 @@ public class AbstractJdbcDao {
     public Connection createConnection() throws ClassNotFoundException {
         try {
             Class.forName("org.h2.Driver");
-            connection = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/USER", "test", "test");
+            connection = DriverManager.getConnection("jdbc:h2:~/USER", "test", "test");
         } catch ( SQLException e) {
             e.printStackTrace();
         }
@@ -22,6 +22,7 @@ public class AbstractJdbcDao {
     public void createDatabase() throws SQLException {
         Statement statement = connection.createStatement();
         statement.execute("CREATE TABLE USER("
+                + "USER_ID INT(11) NOT NULL auto_increment, "
                 + "LOGIN VARCHAR, "
                 + "PASSWORD VARCHAR, "
                 + "EMAIL VARCHAR, "

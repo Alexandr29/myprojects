@@ -4,17 +4,6 @@ import java.util.Date;
 
 public class User {
 
-    public User(String login, String password, String email, String firstName,
-            String lastName) {
-        this.role = role;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthday = birthday;
-    }
-
     private Role role;
     private Long id;
     private String login;
@@ -24,7 +13,19 @@ public class User {
     private String lastName;
     private Date birthday;
 
-    public User() {
+    public User(Long id, String login, String password, String email,
+            String firstName, String lastName) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+
+    }
+
+    public User(String login, String password, String email, String firstName,
+            String lastName) {
+        this(null,login,password,email,firstName,lastName);
 
     }
 

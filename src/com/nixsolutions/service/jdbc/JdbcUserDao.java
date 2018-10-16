@@ -23,7 +23,6 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
                 + "(LOGIN, PASSWORD, EMAIL, FIRSTNAME, LASTNAME) VALUES"
                 + "(?,?,?,?,?)";
         try {
-
             connection = createConnection();
             preparedStatement = connection.prepareStatement(insertTableSQL);
             preparedStatement.setString(1, login);
@@ -43,7 +42,6 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
                     e.printStackTrace();
                 }
             }
-
             if (connection != null) {
                 try {
                     connection.close();
@@ -51,7 +49,6 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
                     e.printStackTrace();
                 }
             }
-
         }
     }
 
@@ -75,7 +72,7 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
             ResultSet rst;
             rst = statement.executeQuery(s);
             while (rst.next()) {
-                user = new User(rst.getString("LOGIN"),
+                user = new User(rst.getLong("USER_ID"),rst.getString("LOGIN"),
                         rst.getString("PASSWORD"), rst.getString("EMAIL"),
                         rst.getString("FIRSTNAME"), rst.getString("LASTNAME"));
                 users.add(user);
