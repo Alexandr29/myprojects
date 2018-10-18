@@ -36,7 +36,7 @@ public class JdbcRoleDao extends AbstractJdbcDao implements RoleDao {
                 }
             }
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
@@ -61,15 +61,14 @@ public class JdbcRoleDao extends AbstractJdbcDao implements RoleDao {
             createConnection().createStatement().execute("UPDATE ROLE"
                     + " SET ROLENAME = "+"'"+role.getName()+"'"
                     + " WHERE ROLE_ID = " + "'"+role.getId()+"'" + ";");
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
+    }}
 
     @Override public void remove(Role role) {
         try {
             createConnection().createStatement().execute("DELETE FROM ROLE WHERE ROLE_ID = "+"'"+role.getId()+"'");
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

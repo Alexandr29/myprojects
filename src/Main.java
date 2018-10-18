@@ -31,8 +31,8 @@ public class Main {
         AbstractJdbcDao abstractJdbcDao = new AbstractJdbcDao();
 
         try {
-            abstractJdbcDao.createConnection();
-            abstractJdbcDao.createDatabase();
+            AbstractJdbcDao.createConnection();
+            abstractJdbcDao.createTables();
             JdbcUserDao jdbcUserDao = new JdbcUserDao();
             JdbcRoleDao jdbcRoleDao = new JdbcRoleDao();
 
@@ -54,8 +54,8 @@ public class Main {
             jdbcUserDao.update(user1);
             System.out.println(jdbcUserDao.findAll());
 
-        } finally {
-            abstractJdbcDao.createConnection().close();
+        }catch (Exception e){
+            e.getCause();
         }
     }
 }

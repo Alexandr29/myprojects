@@ -1,40 +1,78 @@
 package com.nixsolutions.service.jdbc;
 
+import com.nixsolutions.service.dao.UserDao;
+import com.nixsolutions.service.impl.Role;
+import com.nixsolutions.service.impl.User;
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.junit.Test;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
 
-import java.io.FileInputStream;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+public class AbstractJdbcDaoTest extends DBTestCase {
+    private UserDao userDao = new JdbcUserDao();
 
-public class AbstractJdbcDaoTest {
-
-    public AbstractJdbcDaoTest() {
+    public AbstractJdbcDaoTest(String name) {
+        super(name);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("h2");
         System.setProperty(
                 PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,
-                "org.h2.Driver");
+                resourceBundle.getString("jdbc.driver"));
         System.setProperty(
                 PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL,
-                "jdbc:h2:mem:User");
+                resourceBundle.getString("jdbc.url"));
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME,
-                "test");
+                resourceBundle.getString("jdbc.password"));
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD,
-                "test");
+                resourceBundle.getString("jdbc.username"));
+        createTables();
     }
 
-    protected IDataSet getDataSet() throws Exception {
-
-        return new FlatXmlDataSetBuilder()
-                .build(new FileInputStream("dataset.xml"));
+    public void testFindAll() {
+        List<User> expectedList = new ArrayList<>();
+        expectedList
+                .add(new User(1L, "Alex", "1234", "alex@gmail.com", "Alexandr",
+                        "Sinkevich", Date.valueOf("1997-04-29"), 1L));
+        assertEquals(expectedList.toString(), userDao.findAll().toString());
     }
 
-    @Test public void testById() {
-        int userId = 2;// get user id from database
-        assertThat(2, is(userId));
+    public void testFindByLoginTest() {
+        Role expectedRole = new Role(1l, "admin");
+        User expectedUser = new User(1L, "Alex", "1234", "alex@gmail.com",
+                "Alexandr", "Sinkevich", Date.valueOf("1997-04-29"), 1L);
+        assertEquals(expectedUser.toString(),
+                userDao.findByLogin("Alex").toString());
     }
 
+    public void createTables() {
+        Connection connection = AbstractJdbcDao.createConnection();
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute("drop table IF EXISTS USER");
+            statement.execute("drop table IF EXISTS ROLE");
+            statement.execute("CREATE TABLE IF NOT EXISTS ROLE("
+                    + "ROLE_ID INT(11) NOT NULL auto_increment primary key, "
+                    + "ROLENAME VARCHAR);");
+            statement.execute("CREATE TABLE IF NOT EXISTS USER("
+                    + "USER_ID INT(11) NOT NULL auto_increment primary key, "
+                    + "LOGIN VARCHAR, " + "PASSWORD VARCHAR, "
+                    + "EMAIL VARCHAR, " + "FIRSTNAME VARCHAR, "
+                    + "LASTNAME VARCHAR, " + "DATE DATE," + "ROLE_ID INT(11),"
+                    + "FOREIGN KEY(ROLE_ID) REFERENCES ROLE(ROLE_ID));");
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    @Override protected IDataSet getDataSet() throws Exception {
+        return new FlatXmlDataSet(new File("test/resources/testDataSet.xml"));
+    }
 }

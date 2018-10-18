@@ -1,39 +1,49 @@
 package com.nixsolutions.service.jdbc;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
 public class AbstractJdbcDao {
+    static Connection connection;
+    private static BasicDataSource dataSource;
 
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("h2");
-    private String driver = resourceBundle.getString("jdbc.driver");
-    private String url = resourceBundle.getString("jdbc.url");
-    private String username = resourceBundle.getString("jdbc.username");
-    private String password = resourceBundle.getString("jdbc.password");
+    public static BasicDataSource getDataSource() {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("h2");
+        BasicDataSource ds = new BasicDataSource();
+        ds.setDriverClassName(resourceBundle.getString("jdbc.driver"));
+        ds.setUrl(resourceBundle.getString("jdbc.url"));
+        ds.setUsername(resourceBundle.getString("jdbc.username"));
+        ds.setPassword(resourceBundle.getString("jdbc.password"));
 
-    private Connection connection;
+        ds.setMinIdle(5);
+        ds.setMaxIdle(10);
+        ds.setMaxOpenPreparedStatements(100);
+        dataSource = ds;
+        return dataSource;
+    }
 
-    public Connection createConnection() throws ClassNotFoundException {
+    public static Connection createConnection() {
+
         try {
-            Class.forName(driver);
-            connection = DriverManager
-                    .getConnection(url, username, password);
+            BasicDataSource basicDataSource = AbstractJdbcDao.getDataSource();
+            connection = basicDataSource.getConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getCause());
         }
         return connection;
     }
 
-    public void createDatabase() throws SQLException {
+    public void createTables() throws SQLException {
         Statement statement = connection.createStatement();
-        statement.execute("drop table USER");
-        statement.execute("drop table ROLE");
-        statement.execute("CREATE TABLE ROLE("
+        statement.execute("drop table IF EXISTS USER");
+        statement.execute("drop table IF EXISTS ROLE");
+        statement.execute("CREATE TABLE IF NOT EXISTS ROLE("
                 + "ROLE_ID INT(11) NOT NULL auto_increment primary key, "
                 + "ROLENAME VARCHAR);");
-        statement.execute("CREATE TABLE USER("
+        statement.execute("CREATE TABLE IF NOT EXISTS USER("
                 + "USER_ID INT(11) NOT NULL auto_increment primary key, "
                 + "LOGIN VARCHAR, " + "PASSWORD VARCHAR, " + "EMAIL VARCHAR, "
                 + "FIRSTNAME VARCHAR, " + "LASTNAME VARCHAR, " + "DATE DATE,"

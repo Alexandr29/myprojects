@@ -1,0 +1,10 @@
+<dataset>
+    <ROLE ROLE_ID="1" ROLENAME="admin"/>
+    <ROLE ROLE_ID="2" ROLENAME="user"/>
+    <ROLE ROLE_ID="3" ROLENAME="super"/>
+    <ROLE ROLE_ID="4" ROLENAME="some"/>
+    <ROLE ROLE_ID="5" ROLENAME="some2"/>
+
+    <USER USER_ID="1" LOGIN="Alex" password="1234" email="alex@gmail.com" firstname ="Alexandr" lastname = "Sinkevich" DATE = "1997-04-29" ROLE_ID = "1"/>
+
+</dataset>

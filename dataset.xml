@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-
-    <USER user_id='1' login='Vinod' password='Kashyap1' email='Kashyap1'
-          firstname='Kashyap1' lastname='Kashyap1' date= '1997-04-29'
-          role_id='1'/>
-
-</dataset>

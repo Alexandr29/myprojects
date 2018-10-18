@@ -49,7 +49,7 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
                     throw new SQLException("Creating user failed, no ID obtained.");
                 }
             }
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
@@ -80,7 +80,7 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
                     + ", DATE = " + "'"+user.getBirthday()+"'"
                     + ", ROLE_ID = " + "'"+user.getRole_id()+"'"
                     + " WHERE USER_ID = " + "'"+user.getId()+"'" + ";");
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -88,7 +88,7 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
     @Override public void remove(User user) {
         try {
             createConnection().createStatement().execute("DELETE FROM USER WHERE USER_ID = "+"'"+user.getId()+"'");
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
