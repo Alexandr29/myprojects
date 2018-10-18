@@ -1,4 +1,4 @@
-package com.nixsolutions.service.impl;
+package main.java.com.nixsolutions.service.impl;
 
 public class Role {
     Long id;

@@ -1,6 +1,6 @@
-package com.nixsolutions.service.dao;
+package main.java.com.nixsolutions.service.dao;
 
-import com.nixsolutions.service.impl.Role;
+import main.java.com.nixsolutions.service.impl.Role;
 
 public interface RoleDao {
     void create(Role role);
