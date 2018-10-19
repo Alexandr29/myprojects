@@ -1,87 +1,113 @@
 <?xml version="1.0"?>
 <project name="myproject" default="jar" basedir=".">
-    <property name="out" location="${basedir}/out"/>
-    <property name="dist" location="${basedir}/dist"/>
     <property name="src" location="${basedir}/src"/>
-    <property name="src.test" location="${basedir}/src/main/test"/>
+    <property name="out" location="${basedir}/out/production"/>
+    <property name="outtest" location="out/production"/>
+    <property name="dist" location="${basedir}/dist"/>
+    <property name="test" location="${basedir}/src"/>
     <property name="lib" location="${basedir}/lib"/>
     <property name="reports" location="${basedir}/reports"/>
     <property name="version" value="1.0"/>
 
     <path id="classpath">
         <fileset dir="${lib}" includes="**/*.jar"/>
-        <pathelement path="resources"/>
+        <pathelement path="test.resources"/>
     </path>
     <path id="classpath1">
         <fileset dir="${lib}" includes="**/*.jar"/>
-        <pathelement path="resources"/>
+        <pathelement path="test.resources"/>
     </path>
 
     <path id="classpath-test">
         <fileset dir="${lib}" includes="**/*.jar"/>
-        <pathelement path="${out}/test/resources"/>
+        <pathelement path="${out}/test/test.resources"/>
         <pathelement path="${out}/main"/>
     </path>
 
     <target name="init" depends="clean">
         <mkdir dir="${out}/main/java"/>
-        <mkdir dir="${out}/main/java/resources"/>
+        <mkdir dir="${out}/main/java/test.resources"/>
         <mkdir dir="${out}/main/test"/>
-        <mkdir dir="${out}/main/test/resources"/>
+        <mkdir dir="${out}/main/test/test.resources"/>
         <mkdir dir="${dist}"/>
         <mkdir dir="${reports}/testreport"/>
     </target>
 
-    <target name ="copy-resources" depends="init">
-        <copy todir="${out}/main/java/resources">
-            <fileset dir="${basedir}/src/main/java/resources"/>
+    <target name="copy-test-test.resources">
+        <copy todir="${out}/test/resources">
+            <fileset dir="${basedir}/src/test/test/resources"/>
         </copy>
     </target>
 
-    <target name="copy-test-resources" depends="copy-resources">
-        <copy todir="${out}/main/test/resources">
-            <fileset dir="${basedir}/src/main/test/resources"/>
+    <target name="copy_resources">
+        <copy todir="${out}/main/resources">
+            <fileset dir="${basedir}/src/main/resources"/>
         </copy>
     </target>
 
-    <target name="compile" depends="copy-test-resources" description="compile the source" >
-        <javac srcdir="${src}/main/java" destdir="${out}" includeantruntime="true" debug="true">
+    <target name="compile" depends="copy-test-test.resources, copy_resources">
+        <mkdir dir="${out}"/>
+        <mkdir dir="${outtest}"/>
+        <mkdir dir="${basedir}/reports"/>
+        <!-- Compile the Java code from ${src} into ${build} -->
+        <javac srcdir="${src}" destdir="${out}" includeantruntime="false"
+               debug="true">
+            <compilerarg value="-Xlint:unchecked"/>
             <classpath refid="classpath"/>
         </javac>
     </target>
 
     <target name="testcompile" depends="compile">
-        <javac srcdir="${src}/main/test" destdir="${out}" includeantruntime="true" debug="true">
+        <javac srcdir="${test}" destdir="${out}" includeantruntime="false"
+               debug="true">
+            <compilerarg value="-Xlint:unchecked"/>
             <classpath refid="classpath"/>
         </javac>
     </target>
 
 
-    <target name="test" depends="testcompile" description="run all tests">
-        <junit fork="true" forkmode="once" failureProperty="test.failed" >
+
+    <target name="test1" depends="testcompile">
+        <junit fork="true" haltonfailure="true" printsummary="yes">
+            <classpath location="lib"/>
+            <classpath location="${out}"/>
+            <formatter type="xml"/>
             <classpath refid="classpath-test"/>
 
-            <classpath>
-                <pathelement path="${out}/main/test"/>
-            </classpath>
-
-            <formatter type="xml"/>
-
-            <batchtest todir="${reports}" fork="yes">
-                <fileset dir="${src}/" >
-                    <include name="**/*.java"/>
-                    <exclude name="**/Role*.java"/>
-                    <exclude name="**/User*.java"/>
-                    <exclude name="**/JDBC*.java"/>
+            <batchtest fork="yes" todir="${basedir}/reports">
+                <fileset dir="${test}">
+                    <include name="**/*Test*.java"/>
                 </fileset>
             </batchtest>
+
         </junit>
     </target>
 
+    <path id="test.classpath">
+        <pathelement location="${out}"/>
+        <fileset dir="${lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+    <target name="test" depends="testcompile" description="run all tests">
+        <junit fork="yes" printsummary="yes" haltonfailure="no">
+            <classpath refid="test.classpath" />
+            <batchtest fork="yes" todir="${reports}" >
+                <fileset dir="${src}/test">
+                    <include name="**/*Test.java"/>
+                </fileset>
+            </batchtest>
+            <formatter type="xml" />
+        </junit>
+    </target>
+
+
     <target name="testreport" depends="test">
-        <junitreport todir="${reports}/testreport">
-            <fileset dir="${reports}"/>
-            <report todir="${reports}/testreport"/>
+        <junitreport todir="${basedir}/reports">
+            <fileset dir="${basedir}/reports">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${basedir}/reports"/>
         </junitreport>
     </target>
 

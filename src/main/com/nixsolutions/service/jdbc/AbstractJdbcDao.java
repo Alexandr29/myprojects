@@ -1,4 +1,4 @@
-package main.java.com.nixsolutions.service.jdbc;
+package main.com.nixsolutions.service.jdbc;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import java.sql.Connection;

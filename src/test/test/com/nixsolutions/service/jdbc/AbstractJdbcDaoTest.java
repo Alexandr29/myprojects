@@ -1,10 +1,10 @@
-package main.test.com.nixsolutions.service.jdbc;
+package test.com.nixsolutions.service.jdbc;
 
-import main.java.com.nixsolutions.service.dao.UserDao;
-import main.java.com.nixsolutions.service.impl.Role;
-import main.java.com.nixsolutions.service.impl.User;
-import main.java.com.nixsolutions.service.jdbc.AbstractJdbcDao;
-import main.java.com.nixsolutions.service.jdbc.JdbcUserDao;
+import main.com.nixsolutions.service.dao.UserDao;
+import main.com.nixsolutions.service.impl.Role;
+import main.com.nixsolutions.service.impl.User;
+import main.com.nixsolutions.service.jdbc.AbstractJdbcDao;
+import main.com.nixsolutions.service.jdbc.JdbcUserDao;
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class AbstractJdbcDaoTest extends DBTestCase {
@@ -24,7 +25,7 @@ public class AbstractJdbcDaoTest extends DBTestCase {
 
     public AbstractJdbcDaoTest(String name) {
         super(name);
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("h2");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("h2", Locale.getDefault());
         System.setProperty(
                 PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,
                 resourceBundle.getString("jdbc.driver"));
@@ -76,6 +77,6 @@ public class AbstractJdbcDaoTest extends DBTestCase {
 
     @Override protected IDataSet getDataSet() throws Exception {
         return new FlatXmlDataSet(new File(
-                "src/main/test/resources/testDataSet.xml"));
+                "src/test/test/resources/testDataSet.xml"));
     }
 }
