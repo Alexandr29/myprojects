@@ -1,10 +1,9 @@
-package test.com.nixsolutions.service.jdbc;
+package com.nixsolutions.service.jdbc;
 
-import main.com.nixsolutions.service.dao.UserDao;
-import main.com.nixsolutions.service.impl.Role;
-import main.com.nixsolutions.service.impl.User;
-import main.com.nixsolutions.service.jdbc.AbstractJdbcDao;
-import main.com.nixsolutions.service.jdbc.JdbcUserDao;
+import main.java.com.nixsolutions.service.impl.Role;
+import main.java.com.nixsolutions.service.impl.User;
+import main.java.com.nixsolutions.service.jdbc.AbstractJdbcDao;
+import main.java.com.nixsolutions.service.jdbc.JdbcUserDao;
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
@@ -80,6 +79,6 @@ public class AbstractJdbcDaoTest extends DBTestCase {
 
     @Override protected IDataSet getDataSet() throws Exception {
         return new FlatXmlDataSet(new File(
-                "src/test/test/resources/testDataSet.xml"));
+                "src/test/java/resources/testDataSet.xml"));
     }
 }

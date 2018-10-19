@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<project name="nje2jdbc" default="jar" basedir=".">
+    <property name="build" location="${basedir}/build"/>
+    <property name="dist" location="${basedir}/dist"/>
+    <property name="src" location="${basedir}/src/main/java"/>
+    <property name="src.test" location="${basedir}/src/test/java"/>
+    <property name="lib" location="${basedir}/lib"/>
+    <property name="reports" location="${basedir}/reports"/>
+    <property name="version" value="1.0"/>
+
+    <path id="classpath">
+        <fileset dir="${lib}" includes="**/*.jar"/>
+        <!--<pathelement path="${build}/main/java/resources"/>-->
+    </path>
+
+    <path id="classpath-test">
+        <fileset dir="${lib}" includes="**/*.jar"/>
+
+        <!--<pathelement path="${build}/test/java/resources"/>-->
+    </path>
+
+    <target name="init" depends="clean">
+        <mkdir dir="${build}/main/java"/>
+        <mkdir dir="${build}/main/resources"/>
+        <mkdir dir="${build}/test/java"/>
+        <mkdir dir="${build}/test/resources"/>
+        <mkdir dir="${dist}"/>
+        <mkdir dir="${reports}/testreport"/>
+    </target>
+
+    <target name ="copy-resources" depends="init">
+        <copy todir="${build}/main/java/resources">
+            <fileset dir="${basedir}/src/main/java/resources"/>
+        </copy>
+    </target>
+
+    <target name="copy-test-resources" depends="copy-resources">
+        <copy todir="${build}/test/java/resources">
+            <fileset dir="${basedir}/src/test/java/resources"/>
+        </copy>
+    </target>
+
+    <target name="compile" depends="copy-test-resources" description="compile the source" >
+        <javac srcdir="${src}" destdir="${build}/main/java" includeantruntime="true" debug="true">
+            <classpath refid="classpath"/>
+        </javac>
+    </target>
+
+    <target name="testcompile" depends="compile" description="compile the tests">
+        <javac srcdir="${src.test}" destdir="${build}/test/java" includeantruntime="true">
+            <classpath refid="classpath-test"/>
+        </javac>
+    </target>
+
+
+    <target name="test" depends="testcompile" description="run all tests">
+        <junit fork="true" forkmode="once" failureProperty="test.failed" >
+            <classpath refid="classpath-test"/>
+
+            <classpath>
+                <pathelement path="${build}/test/java"/>
+            </classpath>
+
+            <formatter type="xml"/>
+
+            <batchtest todir="${reports}" fork="yes">
+                <fileset dir="${src.test}" >
+                    <include name="**/*.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name="testreport" depends="test">
+        <junitreport todir="${reports}/testreport">
+            <fileset dir="${reports}"/>
+            <report todir="${reports}/testreport"/>
+        </junitreport>
+    </target>
+
+    <target name="jar" depends="testreport">
+        <jar destfile="${dist}/nje2jdbc.jar"
+             basedir="${build}"
+             includes="${build}/main">
+        </jar>
+    </target>
+
+    <target name="clean" description="clean up">
+        <delete dir="build/"/>
+        <delete dir="dist"/>
+        <delete dir="reports"/>
+    </target>
+
+</project>

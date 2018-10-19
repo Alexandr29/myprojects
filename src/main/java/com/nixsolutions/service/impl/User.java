@@ -1,4 +1,4 @@
-package main.com.nixsolutions.service.impl;
+package main.java.com.nixsolutions.service.impl;
 
 import java.sql.Date;
 
