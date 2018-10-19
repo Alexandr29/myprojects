@@ -1,7 +1,7 @@
-package main.java.com.nixsolutions.service.jdbc;
+package com.nixsolutions.service.jdbc;
 
-import main.java.com.nixsolutions.service.dao.RoleDao;
-import main.java.com.nixsolutions.service.impl.Role;
+import com.nixsolutions.service.dao.RoleDao;
+import com.nixsolutions.service.impl.Role;
 
 import java.sql.*;
 

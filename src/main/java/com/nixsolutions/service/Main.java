@@ -1,10 +1,10 @@
-package com;
+package com.nixsolutions.service;
 
-import main.java.com.nixsolutions.service.impl.Role;
-import main.java.com.nixsolutions.service.impl.User;
-import main.java.com.nixsolutions.service.jdbc.AbstractJdbcDao;
-import main.java.com.nixsolutions.service.jdbc.JdbcRoleDao;
-import main.java.com.nixsolutions.service.jdbc.JdbcUserDao;
+import com.nixsolutions.service.impl.Role;
+import com.nixsolutions.service.impl.User;
+import com.nixsolutions.service.jdbc.AbstractJdbcDao;
+import com.nixsolutions.service.jdbc.JdbcRoleDao;
+import com.nixsolutions.service.jdbc.JdbcUserDao;
 
 
 import java.sql.SQLException;

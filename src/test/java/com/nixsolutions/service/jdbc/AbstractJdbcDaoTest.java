@@ -1,9 +1,6 @@
 package com.nixsolutions.service.jdbc;
-
-import main.java.com.nixsolutions.service.impl.Role;
-import main.java.com.nixsolutions.service.impl.User;
-import main.java.com.nixsolutions.service.jdbc.AbstractJdbcDao;
-import main.java.com.nixsolutions.service.jdbc.JdbcUserDao;
+import com.nixsolutions.service.impl.Role;
+import com.nixsolutions.service.impl.User;
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
@@ -16,7 +13,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class AbstractJdbcDaoTest extends DBTestCase {

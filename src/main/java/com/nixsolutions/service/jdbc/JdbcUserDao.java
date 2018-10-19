@@ -1,7 +1,8 @@
-package main.java.com.nixsolutions.service.jdbc;
+package com.nixsolutions.service.jdbc;
 
-import main.java.com.nixsolutions.service.dao.UserDao;
-import main.java.com.nixsolutions.service.impl.User;
+import com.nixsolutions.service.dao.UserDao;
+import com.nixsolutions.service.impl.User;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
