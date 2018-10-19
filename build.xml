@@ -2,7 +2,7 @@
 <project name="myproject" default="jar" basedir=".">
     <property name="src" location="${basedir}/src"/>
     <property name="out" location="${basedir}/out/production"/>
-    <property name="outtest" location="out/production"/>
+    <property name="outtest" location="${basedir}out/production"/>
     <property name="dist" location="${basedir}/dist"/>
     <property name="test" location="${basedir}/src"/>
     <property name="lib" location="${basedir}/lib"/>
@@ -11,11 +11,13 @@
 
     <path id="classpath">
         <fileset dir="${lib}" includes="**/*.jar"/>
-        <pathelement path="test.resources"/>
+        <pathelement path="resources"/>
+        <pathelement path="src/test/test/resources"/>
+        <pathelement location="${out}"/>
     </path>
     <path id="classpath1">
         <fileset dir="${lib}" includes="**/*.jar"/>
-        <pathelement path="test.resources"/>
+        <pathelement path="resources"/>
     </path>
 
     <path id="classpath-test">
@@ -33,24 +35,24 @@
         <mkdir dir="${reports}/testreport"/>
     </target>
 
-    <target name="copy-test-test.resources">
-        <copy todir="${out}/test/resources">
-            <fileset dir="${basedir}/src/test/test/resources"/>
-        </copy>
-    </target>
+    <!--<target name="copy-test-test.resources">-->
+        <!--<copy todir="${out}/test/resources">-->
+            <!--<fileset dir="${basedir}/src/test/test/resources/"/>-->
+        <!--</copy>-->
+    <!--</target>-->
 
-    <target name="copy_resources">
-        <copy todir="${out}/main/resources">
-            <fileset dir="${basedir}/src/main/resources"/>
-        </copy>
-    </target>
+    <!--<target name="copy_resources">-->
+        <!--<copy todir="${out}/main/resources">-->
+            <!--<fileset dir="${basedir}/src/main/resources"/>-->
+        <!--</copy>-->
+    <!--</target>-->
 
-    <target name="compile" depends="copy-test-test.resources, copy_resources">
+    <target name="compile"><!--depends="copy-test-test.resources, copy_resources"-->
         <mkdir dir="${out}"/>
         <mkdir dir="${outtest}"/>
         <mkdir dir="${basedir}/reports"/>
         <!-- Compile the Java code from ${src} into ${build} -->
-        <javac srcdir="${src}" destdir="${out}" includeantruntime="false"
+        <javac srcdir="${basedir}" destdir="${out}" includeantruntime="false"
                debug="true">
             <compilerarg value="-Xlint:unchecked"/>
             <classpath refid="classpath"/>
@@ -89,9 +91,9 @@
             <include name="**/*.jar"/>
         </fileset>
     </path>
-    <target name="test" depends="testcompile" description="run all tests">
+    <target name="test" depends="compile" description="run all tests">
         <junit fork="yes" printsummary="yes" haltonfailure="no">
-            <classpath refid="test.classpath" />
+            <classpath refid="classpath" />
             <batchtest fork="yes" todir="${reports}" >
                 <fileset dir="${src}/test">
                     <include name="**/*Test.java"/>

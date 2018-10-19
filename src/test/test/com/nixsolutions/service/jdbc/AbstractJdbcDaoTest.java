@@ -21,11 +21,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class AbstractJdbcDaoTest extends DBTestCase {
-    private UserDao userDao = new JdbcUserDao();
-
-    public AbstractJdbcDaoTest(String name) {
-        super(name);
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("h2", Locale.getDefault());
+    @Override public void setUp() throws Exception {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("h2");
         System.setProperty(
                 PropertiesBasedJdbcDatabaseTester.DBUNIT_DRIVER_CLASS,
                 resourceBundle.getString("jdbc.driver"));
@@ -37,6 +34,12 @@ public class AbstractJdbcDaoTest extends DBTestCase {
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD,
                 resourceBundle.getString("jdbc.username"));
         createTables();
+        super.setUp();
+    }
+
+    private JdbcUserDao userDao = new JdbcUserDao();
+
+    public AbstractJdbcDaoTest() {
     }
 
     public void testFindAll() {
