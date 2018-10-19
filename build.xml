@@ -113,11 +113,9 @@
         </junitreport>
     </target>
 
-    <target name="jar" depends="testreport">
-        <jar destfile="${dist}/nje2jdbc.jar"
-             basedir="${out}"
-             includes="${out}/main">
-        </jar>
+    <target name="jar" depends="testcompile">
+        <jar destfile="${dist}/app.jar"
+             basedir="${out}/main"/>
     </target>
 
     <target name="clean" description="clean up">
