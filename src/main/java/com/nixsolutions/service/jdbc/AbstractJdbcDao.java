@@ -7,8 +7,7 @@ import java.sql.Statement;
 import java.util.ResourceBundle;
 
 public class AbstractJdbcDao {
-    static Connection connection;
-    private static BasicDataSource dataSource;
+    private static Connection connection;
 
     public static BasicDataSource getDataSource() {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("h2");
@@ -21,7 +20,7 @@ public class AbstractJdbcDao {
         ds.setMinIdle(5);
         ds.setMaxIdle(10);
         ds.setMaxOpenPreparedStatements(100);
-        dataSource = ds;
+        BasicDataSource dataSource = ds;
         return dataSource;
     }
 

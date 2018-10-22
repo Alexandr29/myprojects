@@ -9,7 +9,7 @@ import java.util.List;
 
 public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
 
-    private List<User> users = new ArrayList<>();
+    private ArrayList<User> users = new ArrayList<>();
 
     @Override public void create(User user) {
 
@@ -114,8 +114,12 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
             System.out.println("exeption " + e.getCause());
         } finally {
             try {
-                statement.close();
-                connection.close();
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -145,8 +149,12 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
             System.out.println("exeption " + e.getCause());
         } finally {
             try {
-                statement.close();
-                connection.close();
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }

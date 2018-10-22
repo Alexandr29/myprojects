@@ -10,7 +10,7 @@
 
     <path id="classpath">
         <fileset dir="${lib}" includes="**/*.jar"/>
-        <!--<pathelement path="${build}/main/java/resources"/>-->
+        <pathelement path="${build}/main/java/resources"/>
     </path>
 
     <path id="classpath-test">
@@ -80,7 +80,7 @@
     </target>
 
     <target name="jar" depends="testreport">
-        <jar destfile="${dist}/nje2jdbc.jar"
+        <jar destfile="${dist}/myapp.jar"
              basedir="${build}"
              includes="${build}/main">
         </jar>
