@@ -71,7 +71,7 @@ public class JdbcUserDao extends AbstractJdbcDao implements UserDao {
 
     @Override public void update(User user) {
         try {
-            createConnection().createStatement().execute("UPDATE USER"
+            createConnection().createStatement().executeUpdate("UPDATE USER"
                     + " SET LOGIN = "+"'"+user.getLogin()+"'"
                     + ", PASSWORD = " + "'"+user.getPassword()+"'"
                     + ", EMAIL = " + "'"+user.getEmail()+"'"

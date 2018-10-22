@@ -1,10 +1,15 @@
 package com.nixsolutions.service.jdbc;
+
 import com.nixsolutions.service.impl.Role;
 import com.nixsolutions.service.impl.User;
+import org.dbunit.Assertion;
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.operation.DatabaseOperation;
 
 import java.io.File;
 import java.sql.Connection;
@@ -16,6 +21,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class AbstractJdbcDaoTest extends DBTestCase {
+
+
     @Override public void setUp() throws Exception {
         ResourceBundle resourceBundle = ResourceBundle.getBundle("h2");
         System.setProperty(
@@ -32,23 +39,60 @@ public class AbstractJdbcDaoTest extends DBTestCase {
         super.setUp();
     }
 
-    private JdbcUserDao userDao = new JdbcUserDao();
+
 
     public AbstractJdbcDaoTest() {
     }
 
+    public void testUpdate() throws Exception {
+        JdbcUserDao userDao = new JdbcUserDao();
+
+        Role role = new Role(1L, "Admin");
+        User user = new User(2L, "upd", "upd", "upd",
+                "upd", "upd", Date.valueOf("2222-02-22"), role.getId());
+
+        userDao.update(user);
+        IDataSet actualDataSet = getConnection().createDataSet();
+        ITable actualTable = actualDataSet.getTable("USER");
+        IDataSet expectedDataSet = new FlatXmlDataSet(new File("src/test/java/resources/testDataSetUpdate.xml"));
+        ITable expectedTable = expectedDataSet.getTable("USER");
+        ITable filteredActualTable = DefaultColumnFilter.includedColumnsTable(actualTable,
+                expectedTable.getTableMetaData().getColumns());
+
+
+        Assertion.assertEquals(expectedTable, filteredActualTable);
+    }
+    public void testRemove() throws Exception {
+        JdbcUserDao userDao = new JdbcUserDao();
+        User user = new User(2L, "Alex2", "alex2", "alex2@gmail.com",
+                "Alexandr2", "Sinkevich2", Date.valueOf("1997-04-29"),1L);
+
+        userDao.remove(user);
+        IDataSet actualDataSet = getConnection().createDataSet();
+        ITable actualTable = actualDataSet.getTable("USER");
+        IDataSet expectedDataSet = new FlatXmlDataSet(
+                new File("src/test/java/resources/testDataSetRemove.xml"));
+        ITable expectedTable = expectedDataSet.getTable("USER");
+
+        Assertion.assertEquals(expectedTable, actualTable);
+    }
+
     public void testFindAll() {
+        JdbcUserDao userDao = new JdbcUserDao();
         List<User> expectedList = new ArrayList<>();
         expectedList
                 .add(new User(1L, "Alex", "1234", "alex@gmail.com", "Alexandr",
                         "Sinkevich", Date.valueOf("1997-04-29"), 1L));
+        expectedList.add(new User(2L, "Alex2", "alex2", "alex2@gmail.com",
+                "Alexandr2", "Sinkevich2", Date.valueOf("1997-04-29"), 2L));
         assertEquals(expectedList.toString(), userDao.findAll().toString());
     }
 
     public void testFindByLoginTest() {
-        Role expectedRole = new Role(1l, "admin");
+        JdbcUserDao userDao = new JdbcUserDao();
+        Role role = new Role(1l, "admin");
         User expectedUser = new User(1L, "Alex", "1234", "alex@gmail.com",
-                "Alexandr", "Sinkevich", Date.valueOf("1997-04-29"), 1L);
+                "Alexandr", "Sinkevich", Date.valueOf("1997-04-29"), role.getId());
         assertEquals(expectedUser.toString(),
                 userDao.findByLogin("Alex").toString());
     }
@@ -74,7 +118,7 @@ public class AbstractJdbcDaoTest extends DBTestCase {
     }
 
     @Override protected IDataSet getDataSet() throws Exception {
-        return new FlatXmlDataSet(new File(
-                "src/test/java/resources/testDataSet.xml"));
+        return new FlatXmlDataSet(
+                new File("src/test/java/resources/testDataSet.xml"));
     }
 }

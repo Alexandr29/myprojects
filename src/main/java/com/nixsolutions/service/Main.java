@@ -6,15 +6,13 @@ import com.nixsolutions.service.jdbc.AbstractJdbcDao;
 import com.nixsolutions.service.jdbc.JdbcRoleDao;
 import com.nixsolutions.service.jdbc.JdbcUserDao;
 
-
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Main {
-    public static void main(String[] args)
-            throws SQLException, ClassNotFoundException {
+    public static void main(String[] args) throws SQLException {
         java.sql.Date sqldate = null;
         String sdate = "17.10.2018";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -33,7 +31,7 @@ public class Main {
                 sqldate, 1l);
         AbstractJdbcDao abstractJdbcDao = new AbstractJdbcDao();
 
-        try {
+        try{
             AbstractJdbcDao.createConnection();
             abstractJdbcDao.createTables();
             JdbcUserDao jdbcUserDao = new JdbcUserDao();
@@ -53,11 +51,12 @@ public class Main {
             System.out.println(jdbcUserDao.findByEmail("toliku"));
 
             user1.setPassword("4321");
+            user1.setLogin("alexupd");
             System.out.println(jdbcRoleDao.findByName("god"));
             jdbcUserDao.update(user1);
             System.out.println(jdbcUserDao.findAll());
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getCause();
         }
     }
